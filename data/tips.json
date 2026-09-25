@@ -1,0 +1,241 @@
+[
+  {
+    "company": "Decathlon",
+    "country": "Czech Republic",
+    "content": "Běžecký srpen v Decathlonu: 50 km a 100 Kč na další nákup je vaše!",
+    "start": "2026-08-01",
+    "duration": "1 month",
+    "repeat": "every year in August",
+    "url": "https://membership.decathlon.com/cs-CZ/earn-more-points/#challenges/683"
+  },
+  {
+    "company": "Decathlon",
+    "country": "Czech Republic",
+    "content": "Užijte si 3 hodiny sportu týdně a získejte 200 bodů v Decathlonu",
+    "start": "2026-08-01",
+    "duration": "1 week",
+    "repeat": "every week",
+    "url": "https://membership.decathlon.com/cs-CZ/earn-more-points/#permanent-pillars/move"
+  },
+  {
+    "company": "Štěrba bike",
+    "country": "Czech Republic",
+    "city": "Prague",
+    "content": "Testovací vyjížďka gravel kolo 40 km na festivalu Merida days na Spořilově",
+    "start": "2026-08-20 15:30",
+    "duration": "3 hours",
+    "repeat": "every year in August",
+    "url": "https://www.sterbabike.cz/604909"
+  },
+  {
+    "company": "",
+    "country": "Czech Republic",
+    "city": "Prague",
+    "content": "Týden sportu zdarma",
+    "start": "2026-12-25",
+    "duration": "1 week",
+    "repeat": "every year in December",
+    "url": "https://prahasportovni.cz/"
+  },
+  {
+    "company": "Decathlon",
+    "country": "Czech Republic",
+    "city": "Prague",
+    "content": "Zapůjčení sportovního vybavení zdarma z LOX skříněk od Decathlonu",
+    "start": "2026-08-01",
+    "duration": "1 year",
+    "repeat": "every year",
+    "url": "https://kariera.decathlon.cz/blog/YourLOX"
+  },
+  {
+    "company": "Decathlon",
+    "country": "Czech Republic",
+    "content": "Vyjezdi si 100 Kč slevu za 200 km v pedálech.",
+    "start": "2026-09-01",
+    "duration": "1 month",
+    "repeat": "every year in September",
+    "url": "https://membership.decathlon.com/cs-CZ/earn-more-points/#challenges/729"
+  },
+  {
+    "company": "VOZP",
+    "companyType": "health insurance",
+    "country": "Czech Republic",
+    "content": "Pravidelný pohyb 700 Kč (lezectví na umělé stěně, byla proplacena lezecká stěna Třinácka v Praze)",
+    "start": "2026-01-01",
+    "duration": "1 year",
+    "repeat": "every year",
+    "url": "https://www.vozp.cz/prispevek/pravidelny-pohyb"
+  },
+  {
+    "company": "VOZP",
+    "companyType": "health insurance",
+    "country": "Czech Republic",
+    "content": "Plavání 700 Kč",
+    "start": "2026-01-01",
+    "duration": "1 year",
+    "repeat": "every year",
+    "url": "https://www.vozp.cz/prispevek/plavani"
+  },
+  {
+    "company": "VOZP",
+    "companyType": "health insurance",
+    "country": "Czech Republic",
+    "content": "Očkování 1000 Kč",
+    "start": "2026-01-01",
+    "duration": "1 year",
+    "repeat": "every year",
+    "url": "https://www.vozp.cz/prispevek/ockovani-pro-dospele"
+  },
+  {
+    "company": "VOZP",
+    "companyType": "health insurance",
+    "country": "Czech Republic",
+    "content": "Za každý třetí odběr (plná krev i krevní složky) 1 000 Kč (pohybové aktivity vč. plavání, bylo proplaceno plavání v Podolí)",
+    "start": "2026-01-01",
+    "duration": "1 year",
+    "repeat": "every year",
+    "url": "https://www.vozp.cz/prispevek/ockovani-pro-dospele"
+  },
+  {
+    "company": "naHoru.tv",
+    "country": "Czech Republic",
+    "city": "Pec pod Sněžkou",
+    "content": "Dvě přednášky a jeden živý rozhovor v Klondike music club",
+    "start": "2026-09-19",
+    "duration": "1 day",
+    "url": "https://www.nahoru.tv/event-details/nahoru-tv-night-vol-1-1"
+  },
+  {
+    "company": "Svět outdooru",
+    "country": "Czech Republic",
+    "city": "Prague",
+    "content": "Festival Obzory - největší cestovatelsko - outdoorový festival v ČR (vstupenky zdarma pro členy Alpenveiren Česko-Slovensko)",
+    "start": "2026-11-06",
+    "duration": "2 day",
+    "repeat": "every year in October",
+    "url": "https://festivalobzory.cz"
+  },
+  {
+    "company": "Ministerstvo kultury ČR",
+    "country": "Czech Republic",
+    "content": "První neděle v měsíci zdarma. Státní muzea a galerie se otevírají úplně všem.",
+    "start": "2026-09-06",
+    "duration": "1 day",
+    "repeat": "every first Sunday of month",
+    "url": "https://www.mk.gov.cz/novinky-a-media-cs-4/6585cs-prvni-nedele-v-mesici-zdarma-statni-muzea-a-galerie-se-oteviraji-uplne-vsem"
+  },
+  {
+    "company": "ČHS",
+    "country": "Czech Republic",
+    "city": "Prague",
+    "content": "Členové ČHS si mohou v knihovně půjčit zahraniční i tuzemské horolezecké průvodce",
+    "start": "2026-09-01",
+    "repeat": "every week",
+    "duration": "1 day",
+    "url": "https://www.horosvaz.cz/sluzby-pro-cleny/knihovna-chs"
+  },
+  {
+    "company": "Šachový klub Praha 5",
+    "country": "Czech Republic",
+    "city": "Prague",
+    "content": "Bez nutnosti členství je možné si přijít zahrát šachy v sutenerénu Zubatého 10, Praha 5 - Smíchov během volného hraní pátky od 16:00 do 19:00 hodin",
+    "start": "2026-09-04",
+    "repeat": "every week",
+    "duration": "1 day",
+    "url": "https://www.sksmichov.cz/kontakty"
+  },
+  {
+    "company": "Hospital",
+    "country": "Czech Republic",
+    "city": "Prague",
+    "content": "Za každý odběr plné krve 100Kč stravenka + den volna + za každý třetí odběr (plná krev i krevní složky) 1 000 Kč (pohybové aktivity vč. plavání, bylo proplaceno plavání v Podolí)",
+    "start": "2026-01-01",
+    "duration": "4 month",
+    "repeat": "every 4 months",
+    "url": "https://www.vfn.cz/pacienti/kliniky-ustavy/fakultni-transfuzni-oddeleni/informace-pro-darce-krve"
+  },
+  {
+    "company": "Czech Academy of Sciences",
+    "country": "Czech Republic",
+    "content": "Výtisk A / Easy a  A / Magazín zasíláme zdarma přímo do schránek. Pokud máte o časopis zájem, napište nám do redakce na predplatne@ssc.cas.cz.",
+    "start": "2026-01-01",
+    "duration": "1 year",
+    "repeat": "every 1 year",
+    "url": "https://www.avcr.cz/cs/pro-verejnost/casopisy"
+  },
+  {
+    "company": "Adidas",
+    "country": "Wordwide",
+    "content": "Almost every day in week you can run and train with Adidas Runners community for free (atleast 5 times and you will get free reward functional T-shirt or vest)",
+    "start": "2026-01-01",
+    "duration": "1 year",
+    "repeat": "every 1 year",
+    "url": "https://www.adidas-group.com/en/magazine/culture/celebrating-ten-years-of-adidas-runners"
+  },
+  {
+    "company": "Czech Academy of Sciences",
+    "country": "Czech Republic",
+    "content": "Týden mozku",
+    "start": "2026-03-09",
+    "duration": "6 day",
+    "repeat": "every 1 year",
+    "url": "https://www.tydenmozku.cz"
+  },
+  {
+    "company": "NextBike",
+    "country": "Czech Republic",
+    "city": "Prague",
+    "content": "V rámci Multisport karty je možné využít 2x 60 minut zdarma, v rámci PID karty je možné využít 2x 15 minut zdarma)",
+    "start": "2026-01-01",
+    "duration": "1 day",
+    "repeat": "every 1 day",
+    "url": "https://www.tydenmozku.cz"
+  },
+  {
+    "company": "FormFactory",
+    "country": "Czech Republic",
+    "content": "V rámci Multisport karty je možné využít InBody měření zdarma",
+    "start": "2026-01-01",
+    "duration": "6 months",
+    "repeat": "every 6 months",
+    "url": "https://www.formfactory.cz/en/inbody"
+  },
+  {
+    "company": "Multisport",
+    "country": [
+      "Czech Republic",
+      "Slovakia"
+    ],
+    "content": "Dopřejte si pohyb a odpočinek, když je potřebujete. MultiSport karta to pokryje. Získejte benefit, který opravdu využijete. Sport, wellness i relax každý den",
+    "start": "2026-01-01",
+    "duration": "1 year",
+    "repeat": "every 1 year",
+    "url": "https://multisport.cz/pro-zamestnance"
+  },
+  {
+    "company": "Decathlon",
+    "country": "Czech Republic",
+    "city": "Brno",
+    "content": "Social Ride ve spolupráci s Favorit Brno!",
+    "start": "2026-09-12",
+    "duration": "1 day",
+    "url": "https://www.strava.com/clubs/1699371/group_events/3531964907505395902/occurrences/FQIW_KKJ8NjXh4RiHBTUHxQSFBgUFBQAFAAAHBaAkIvKkmgAAA=="
+  },
+  {
+    "company": "Noc vědy",
+    "country": "Czech Republic",
+    "content": "Cílem Noci vědy je bořit mýty o vědcích a vědkyních jako lidech zavřených v laboratořích a ukázat nejširší veřejnosti, že vědci jsou „obyčejní lidé“, kteří dělají práci přínosnou pro každého z nás, dokážou ji poutavě představit, ale také se dovedou bavit.",
+    "start": "2026-09-25",
+    "duration": "1 day",
+    "url": "https://www.nocvedy.cz"
+  },
+  {
+    "company": "Darn tough",
+    "country": "Wordwide",
+    "content": "Výměna zdarma po prošoupání a díry z nošení",
+    "start": "2026-01-01",
+    "duration": "1 year",
+    "repeat": "every 1 year",
+    "url": "https://darntough.com"
+  }
+]

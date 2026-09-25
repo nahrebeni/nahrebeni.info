@@ -1,0 +1,956 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8">
+
+    <title>On the ridge | Na hřebeni</title>
+
+    <script
+      type="text/javascript"
+      src="https://unpkg.com/vis-timeline@latest/standalone/umd/vis-timeline-graph2d.min.js"
+    ></script>
+
+    <script
+      type="text/javascript"
+      src="https://unpkg.com/rrule@2.8.1/dist/es5/rrule.min.js"
+    ></script>
+
+    <link
+      href="https://unpkg.com/vis-timeline@latest/styles/vis-timeline-graph2d.min.css"
+      rel="stylesheet"
+      type="text/css"
+    />
+
+    <link 
+      href="https://blog.nahrebeni.info/css/index.css"
+      rel="stylesheet" 
+      type="text/css"
+    />
+
+    <style>
+        html,
+        body {
+            margin: 0;
+            padding: 0;
+            width: 100%;
+        }
+
+        #visualization {
+            width: 100%;
+            border: 1px solid lightgray;
+            box-sizing: border-box;
+        }
+
+        #filters {
+            display: flex;
+            gap: 40px;
+            margin-bottom: 20px;
+        }
+
+        .filter-group {
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+        }
+
+        .filter-item {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .filter-item input {
+            margin: 0;
+        }
+        .country-group {
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+        }
+
+        .city-filters {
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+            margin-left: 24px;
+        }
+
+        .city-filter-item {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+    </style>
+  </head>
+
+  <body>
+
+    <nav id="nav" class="show">
+        <span id="blog-info">
+            <a class="nav-site-title" href="/">
+            <span class="site-name">NaHřebeni.info</span>
+            </a>
+        </span>
+
+        <div id="menus">
+            <div class="menus_items">
+            <div class="menus_item">
+                <a class="site-page always-active" href="/">
+                <span>HŘEBEN</span>
+                </a>
+            </div>
+
+            <div class="menus_item">
+                <a class="site-page" href="https://blog.nahrebeni.info">
+                <span>NÁŠ OSOBNÍ BLOG</span>
+                </a>
+            </div>
+            </div>
+
+            <div id="toggle-menu">
+            <span class="site-page">
+                <i class="fas fa-bars fa-fw"></i>
+            </span>
+            </div>
+        </div>
+    </nav>
+
+    Share your tips and inspire each other!
+    <br>
+    <br>
+    Share only tips based on personal experience, unless the added value is beyond reasonable doubt. Tips may include events related to time and place or may be purely online. Unlike in your personal calendar, keep tips here undated whenever possible. What should connect them is relationship to the climbing and mountaineering including the preparation time of doing wide range of sports, aquiring experience and knowledge or relaxing where the continuity to the climbing may be less or none because we believe we can enrich ourselves in this no less important area as well.
+    <br>
+    <br>
+    Even though we are adding tips for the Czech Republic, Prague and in the czech language mostly (please use translator, e.g. in google chrome [Mouse Tooltip Translator](https://chromewebstore.google.com/detail/mouse-tooltip-translator/hmigninkgibhdckiaphhmbgcghochdjc), we would like the project to develop and locals to develop locals across the world. Because we do not have any sponsors with Anna, our personal contributions will be focused on money saving tips and becase I am bioinformatics and Anna is pharmacists the tips failing under relaxing will be rather intellectual kind.
+    <br>
+    <br>
+    Do you have any feedback, comments, ideas for improvement, or anything else? Please contact us at ldrahnik[at]gmail.com + annalysek[at]seznam.cz.
+    <br>
+    * do not share tips that are limited to capacity, you would like still use them for yourself and sharing would make it difficult or even impossible
+    <br>
+    <br>
+    How to participate:
+    <br>
+    - Google form: https://docs.google.com/forms/d/e/1FAIpQLSdJ8I7Y9h01TYeFubLhcrMJ1R-jRjIUt8Rpe7Ib5zlF-OAxLA/viewform?usp=header (limited to 1 editable response)
+    <br>
+    <br>
+    <div id="visualization"></div>
+
+    <div id="filters">
+
+        <div>
+        <strong>Insurance company:</strong>
+        <div id="insurance-company-filters"></div>
+        </div>
+
+        <div>
+        <strong>Company:</strong>
+        <div id="company-filters"></div>
+        </div>
+
+        <div>
+        <strong>Location:</strong>
+        <div id="location-filters"></div>
+    </div>
+
+    <br>
+
+    <script>
+
+      let timeline;
+      let companyFilters;
+      let insuranceCompanyFilters;
+      let locationFilters;
+      let items;
+      let dataView;
+
+      let selectedCompanies = new Set();
+      let selectedInsuranceCompanies = new Set();
+      let selectedCountries = new Set();
+      let selectedCities = new Set();
+
+      items = new vis.DataSet([]);
+
+      // --------------------------------------------------
+      // Configuration
+      // --------------------------------------------------
+
+      const now = new Date();
+
+      // How far into the future should recurring events be generated?
+      const generated_events_start = new Date(
+        now.getFullYear(),
+        now.getMonth(),
+        1
+      );
+
+      const generated_events_end = new Date(
+        now.getFullYear() + 2,
+        now.getMonth(),
+        1
+      );
+
+
+      // Initial Timeline zoom: current month
+      const timeline_zoom_start = generated_events_start;
+
+      const timeline_zoom_end = new Date(
+        now.getFullYear(),
+        now.getMonth() + 1,
+        1
+      );
+
+
+      // --------------------------------------------------
+      // Duration parser
+      // --------------------------------------------------
+
+      function addDuration(date, duration) {
+
+        const end = new Date(date);
+
+        const match = duration.match(
+            /^(\d+)\s+(minute|minutes|hour|hours|day|days|week|weeks|month|months|year|years)$/
+        );
+
+        if (!match) {
+          throw new Error(`Unknown duration: "${duration}"`);
+        }
+
+        const amount = Number(match[1]);
+        const unit = match[2];
+
+        switch (unit) {
+
+          case "hour":
+          case "hours":
+            end.setHours(end.getHours() + amount);
+            break;
+
+          case "minute":
+          case "minutes":
+            end.setMinutes(end.getMinutes() + amount);
+            break;
+            
+          case "day":
+          case "days":
+            end.setDate(end.getDate() + amount);
+            break;
+
+          case "week":
+          case "weeks":
+            end.setDate(end.getDate() + amount * 7);
+            break;
+
+          case "month":
+          case "months":
+            end.setMonth(end.getMonth() + amount);
+            break;
+
+          case "year":
+          case "years":
+            end.setFullYear(end.getFullYear() + amount);
+            break;
+        }
+
+        return end;
+      }
+
+
+      // --------------------------------------------------
+      // Recurrence parser
+      // --------------------------------------------------
+
+      function parseStartDates(start) {
+
+        if (Array.isArray(start)) {
+            return start.map(date => new Date(date));
+        }
+
+        if (typeof start !== "string") {
+            return [new Date(start)];
+        }
+
+        return start
+            .replace(/\s+a\s+/gi, ",")
+            .split(",")
+            .map(date => date.trim())
+            .filter(Boolean)
+            .map(date => new Date(date));
+      }
+
+      function generateDates(repeat, start, until) {
+
+        if (!repeat) {
+          return [start];
+        }
+
+        const text = repeat.toLowerCase().trim();
+
+        // every day
+        if (text === "every day") {
+
+            return new rrule.RRule({
+                freq: rrule.RRule.DAILY,
+                dtstart: start,
+                until: until
+            }).all();
+
+        }
+
+        let match = text.match(
+            /^every (\d+) days?$/
+        );
+
+        if (match) {
+            return new rrule.RRule({
+            freq: rrule.RRule.DAILY,
+            interval: Number(match[1]),
+            dtstart: start,
+            until: until
+            }).all();
+        }
+
+        // every week
+        if (text === "every week") {
+
+          return new rrule.RRule({
+            freq: rrule.RRule.WEEKLY,
+            dtstart: start,
+            until: until
+          }).all();
+
+        }
+
+
+        // every month
+        if (text === "every month") {
+
+          return new rrule.RRule({
+            freq: rrule.RRule.MONTHLY,
+            dtstart: start,
+            until: until
+          }).all();
+
+        }
+
+
+        // first Sunday of every month
+        if (text === "every first sunday of month") {
+
+          return new rrule.RRule({
+            freq: rrule.RRule.MONTHLY,
+            byweekday: rrule.RRule.SU.nth(1),
+            dtstart: start,
+            until: until
+          }).all();
+
+        }
+
+
+        // every year
+        if (text === "every year") {
+
+          return new rrule.RRule({
+            freq: rrule.RRule.YEARLY,
+            dtstart: start,
+            until: until
+          }).all();
+
+        }
+
+
+        // every N weeks
+        match = text.match(
+          /^every (\d+) weeks?$/
+        );
+
+        if (match) {
+
+          return new rrule.RRule({
+            freq: rrule.RRule.WEEKLY,
+            interval: Number(match[1]),
+            dtstart: start,
+            until: until
+          }).all();
+
+        }
+
+
+        // every N months
+        match = text.match(
+          /^every (\d+) months?$/
+        );
+
+        if (match) {
+
+          return new rrule.RRule({
+            freq: rrule.RRule.MONTHLY,
+            interval: Number(match[1]),
+            dtstart: start,
+            until: until
+          }).all();
+
+        }
+
+
+        // every N years
+        match = text.match(
+          /^every (\d+) years?$/
+        );
+
+        if (match) {
+
+          return new rrule.RRule({
+            freq: rrule.RRule.YEARLY,
+            interval: Number(match[1]),
+            dtstart: start,
+            until: until
+          }).all();
+
+        }
+
+
+        // every year in January, February, ..., December
+        match = text.match(
+          /^every year in (january|february|march|april|may|june|july|august|september|october|november|december)$/
+        );
+
+        if (match) {
+
+          const months = {
+            january: 1,
+            february: 2,
+            march: 3,
+            april: 4,
+            may: 5,
+            june: 6,
+            july: 7,
+            august: 8,
+            september: 9,
+            october: 10,
+            november: 11,
+            december: 12
+          };
+
+          return new rrule.RRule({
+            freq: rrule.RRule.YEARLY,
+            bymonth: months[match[1]],
+            dtstart: start,
+            until: until
+          }).all();
+
+        }
+
+
+        throw new Error(
+          `Unknown recurrence rule: "${repeat}"`
+        );
+      }
+
+      function updateFilter() {
+
+          selectedCompanies = new Set(
+              [...companyFilters.querySelectorAll("input:checked")]
+                  .map(input => input.value)
+          );
+
+          selectedInsuranceCompanies = new Set(
+              [...insuranceCompanyFilters.querySelectorAll("input:checked")]
+                  .map(input => input.value)
+          );
+
+          dataView.refresh();
+      }
+
+
+      // --------------------------------------------------
+      // Create Timeline
+      // --------------------------------------------------
+
+      async function createTimeline() {
+
+          const response = await fetch("data/tips.json");
+
+          if (!response.ok) {
+              throw new Error(
+                  `Unable to load tips.json: ${response.status}`
+              );
+          }
+
+          const events = await response.json();
+
+          companyFilters =
+              document.getElementById("company-filters");
+
+          insuranceCompanyFilters = 
+              document.getElementById("insurance-company-filters");
+
+          locationFilters =
+              document.getElementById("location-filters");
+
+
+          companyFilters.addEventListener(
+              "change",
+              updateFilter
+          );
+
+          insuranceCompanyFilters.addEventListener(
+              "change",
+              updateFilter
+          );
+
+          const companies = [
+              ...new Set(
+                  events
+                      .filter(event => event.companyType !== "health insurance")
+                      .map(event => event.company)
+                      .filter(Boolean)
+              )
+          ].sort();
+
+
+          const insuranceCompanies = [
+              ...new Set(
+                  events
+                     .filter(event => event.companyType === "health insurance")
+                     .map(event => event.company)
+                     .filter(Boolean)
+              )
+          ];
+
+          // --------------------------------------------------
+          // Countries and cities
+          // --------------------------------------------------
+
+          const locations = {};
+
+          events.forEach(event => {
+
+            if (!event.country) {
+                return;
+            }
+
+            const countries = Array.isArray(event.country)
+                ? event.country
+                : [event.country];
+
+            countries.forEach(country => {
+
+                if (!locations[country]) {
+                    locations[country] = new Set();
+                }
+
+                if (event.city) {
+                    locations[country].add(event.city);
+                }
+            });
+          });
+
+
+          // --------------------------------------------------
+          // Company filters
+          // --------------------------------------------------
+
+          function createCompanyCheckbox(company, container) {
+            const label = document.createElement("label");
+            label.className = "filter-item";
+
+            const checkbox = document.createElement("input");
+            checkbox.type = "checkbox";
+            checkbox.value = company;
+            checkbox.checked = true;
+
+            label.appendChild(checkbox);
+            label.appendChild(document.createTextNode(company));
+
+            container.appendChild(label);
+          }
+
+          companies.forEach(company => {
+            createCompanyCheckbox(company, companyFilters);
+          });
+
+          insuranceCompanies.forEach(company => {
+            createCompanyCheckbox(company, insuranceCompanyFilters);
+          });
+
+        // --------------------------------------------------
+        // Country / city filters
+        // --------------------------------------------------
+
+        Object.keys(locations)
+            .sort()
+            .forEach(country => {
+
+                const countryContainer =
+                    document.createElement("div");
+
+                countryContainer.className =
+                    "country-filter";
+
+
+                // --------------------------------
+                // Country checkbox
+                // --------------------------------
+
+                const countryLabel =
+                    document.createElement("label");
+
+                countryLabel.className =
+                    "filter-item";
+
+
+                const countryCheckbox =
+                    document.createElement("input");
+
+                countryCheckbox.type = "checkbox";
+                countryCheckbox.value = country;
+                countryCheckbox.checked = true;
+                countryCheckbox.dataset.type = "country";
+
+
+                countryLabel.appendChild(
+                    countryCheckbox
+                );
+
+                countryLabel.appendChild(
+                    document.createTextNode(country)
+                );
+
+                countryContainer.appendChild(
+                    countryLabel
+                );
+
+
+                // --------------------------------
+                // Cities
+                // --------------------------------
+
+                const citiesContainer =
+                    document.createElement("div");
+
+                citiesContainer.className =
+                    "city-filters";
+
+
+                [...locations[country]]
+                    .sort()
+                    .forEach(city => {
+
+                        const cityLabel =
+                            document.createElement("label");
+
+                        cityLabel.className =
+                            "filter-item";
+
+
+                        const cityCheckbox =
+                            document.createElement("input");
+
+                        cityCheckbox.type = "checkbox";
+                        cityCheckbox.checked = true;
+
+                        cityCheckbox.dataset.type = "city";
+                        cityCheckbox.dataset.key =
+                            `${country}|${city}`;
+
+
+                        cityLabel.appendChild(
+                            cityCheckbox
+                        );
+
+                        cityLabel.appendChild(
+                            document.createTextNode(city)
+                        );
+
+                        citiesContainer.appendChild(
+                            cityLabel
+                        );
+                    });
+
+
+                countryContainer.appendChild(
+                    citiesContainer
+                );
+
+                locationFilters.appendChild(
+                    countryContainer
+                );
+            });
+
+
+          // Country checkbox controls all its cities
+
+          locationFilters.addEventListener(
+              "change",
+              event => {
+
+                  const checkbox = event.target;
+
+
+                  if (
+                      checkbox.dataset.type === "country"
+                  ) {
+
+                      const countryContainer =
+                          checkbox.closest(
+                              ".country-filter"
+                          );
+
+                      const cityCheckboxes =
+                          countryContainer.querySelectorAll(
+                              'input[data-type="city"]'
+                          );
+
+
+                      cityCheckboxes.forEach(
+                          cityCheckbox => {
+                              cityCheckbox.checked =
+                                  checkbox.checked;
+                          }
+                      );
+                  }
+
+
+                  updateFilter();
+              }
+          );
+
+
+          // --------------------------------------------------
+          // Initial selection
+          // --------------------------------------------------
+
+          selectedCompanies =
+              new Set(companies);
+
+          selectedInsuranceCompanies =
+              new Set(insuranceCompanies);
+
+          selectedCountries =
+              new Set(Object.keys(locations));
+
+          selectedCities =
+              new Set();
+
+          Object.entries(locations).forEach(
+              ([country, cities]) => {
+
+                  cities.forEach(city => {
+
+                      selectedCities.add(
+                          `${country}|${city}`
+                      );
+                  });
+              }
+          );
+
+
+          items = new vis.DataSet([]);
+
+
+          dataView = new vis.DataView(items, {
+
+              filter: item => {
+
+                  // --------------------------------
+                  // Company
+                  // --------------------------------
+
+                  const companyMatch =
+                      !item.company ||
+                      selectedCompanies.has(item.company) ||
+                      selectedInsuranceCompanies.has(item.company);
+
+                  if (!companyMatch) {
+                      return false;
+                  }
+
+
+                  // --------------------------------
+                  // Event bez country
+                  // --------------------------------
+
+                  if (!item.country) {
+                      return true;
+                  }
+
+
+                  // --------------------------------
+                  // Country
+                  // --------------------------------
+
+                  const countryCheckbox =
+                      [...locationFilters.querySelectorAll(
+                          'input[data-type="country"]'
+                      )]
+                      .find(
+                          input => input.value === item.country
+                      );
+
+
+                  // Country checkbox není nalezen
+                  if (!countryCheckbox) {
+                      return true;
+                  }
+
+
+                  // Country není zaškrtnutá
+                  if (!countryCheckbox.checked) {
+                      return false;
+                  }
+
+
+                  // --------------------------------
+                  // Event bez city
+                  // --------------------------------
+
+                  if (!item.city) {
+                      return true;
+                  }
+
+
+                  // --------------------------------
+                  // City
+                  // --------------------------------
+
+                  const cityKey =
+                      `${item.country}|${item.city}`;
+
+
+                  const cityCheckbox =
+                      [...locationFilters.querySelectorAll(
+                          'input[data-type="city"]'
+                      )]
+                      .find(
+                          input => input.dataset.key === cityKey
+                      );
+
+
+                  // City checkbox není nalezen
+                  if (!cityCheckbox) {
+                      return true;
+                  }
+
+
+                  // City musí být zaškrtnuté
+                  return cityCheckbox.checked;
+              }
+          });
+
+        // --------------------------------------------------
+        // Generate event occurrences
+        // --------------------------------------------------
+
+        events.forEach(event => {
+
+        const startDates = parseStartDates(event.start);
+
+        startDates.forEach((start, startIndex) => {
+
+            const dates = generateDates(
+                event.repeat,
+                start,
+                generated_events_end
+            );
+
+            dates.forEach((date, index) => {
+
+                const end = addDuration(
+                date,
+                event.duration
+                );
+
+
+                items.add({
+
+                company: event.company,
+
+                country: event.country,
+
+                city: event.city,
+
+                content: event.content,
+
+                start: date,
+
+                end: end,
+
+                url: event.url,
+
+                title: `
+                    <a
+                    href="${event.url}"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    >
+                    ${event.content}
+                    </a>
+                `
+                });
+
+            });
+
+            });
+
+        });
+
+
+        // --------------------------------------------------
+        // Timeline configuration
+        // --------------------------------------------------
+
+        const options = {
+
+          locale: "en",
+
+          start: timeline_zoom_start,
+
+          end: timeline_zoom_end,
+
+          tooltip: {
+            followMouse: true,
+            overflowMethod: "cap"
+          }
+
+        };
+
+
+        // --------------------------------------------------
+        // Render Timeline
+        // --------------------------------------------------
+
+        timeline = new vis.Timeline(
+            document.getElementById("visualization"),
+            dataView,
+            options
+        );
+
+        timeline.on("doubleClick", function (properties) {
+
+            if (properties.item === null) {
+                return;
+            }
+
+            const item = items.get(properties.item);
+
+            if (item.url) {
+                window.open(item.url, "_blank");
+            }
+        });
+
+        updateFilter();
+
+      }
+
+
+      // Start
+      createTimeline().catch(error => {
+        console.error(error);
+      });
+
+    </script>
+
+  </body>
+</html>
